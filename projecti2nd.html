@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Image Slider</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { display: flex; justify-content: center; align-items: center; height: 100vh; background: #222; }
+        .slider-container { position: relative; width: 80%; max-width: 800px; overflow: hidden; border-radius: 10px; }
+        .slider { display: flex; transition: transform 0.5s ease-in-out; }
+        .slide { min-width: 100%; transition: opacity 1s; }
+        .slide img { width: 100%; border-radius: 10px; }
+        .nav { position: absolute; top: 50%; transform: translateY(-50%); width: 100%; display: flex; justify-content: space-between; }
+        .nav button { background: rgba(0,0,0,0.5); color: white; border: none; padding: 10px; cursor: pointer; }
+        .thumbnails { display: flex; justify-content: center; gap: 5px; margin-top: 10px; }
+        .thumbnails img { width: 50px; cursor: pointer; opacity: 0.6; border-radius: 5px; }
+        .thumbnails img.active { opacity: 1; border: 2px solid white; }
+    </style>
+</head>
+<body>
+    <div class="slider-container">
+        <div class="slider">
+            <div class="slide"><img src="photo1.jpg" style="width: 900px; height: 300px;" alt="Slide 1"></div>
+            <div class="slide"><img src="photo2.jpg" style="width: 900px; height: 300px;" alt="Slide 2"></div>
+            <div class="slide"><img src="photo3.jpg" style="width: 900px; height: 300px;" alt="Slide 3"></div>
+        </div>
+        <div class="nav">
+            <button id="prev">❮</button>
+            <button id="next">❯</button>
+        </div>
+        <div class="thumbnails">
+            <img src="photo1.jpg" class="thumb" data-index="0">
+            <img src="photo2.jpg" class="thumb" data-index="1">
+            <img src="photo3.jpg" class="thumb" data-index="2">
+        </div>
+    </div>
+    <script>
+        let index = 0;
+        const slides = document.querySelectorAll(".slide");
+        const thumbs = document.querySelectorAll(".thumb");
+        const slider = document.querySelector(".slider");
+
+        function showSlide(i) {
+            if (i >= slides.length) index = 0;
+            if (i < 0) index = slides.length - 1;
+            slider.style.transform = `translateX(-${index * 100}%)`;
+            thumbs.forEach(t => t.classList.remove("active"));
+            thumbs[index].classList.add("active");
+        }
+
+        document.getElementById("next").addEventListener("click", () => { index++; showSlide(index); });
+        document.getElementById("prev").addEventListener("click", () => { index--; showSlide(index); });
+        thumbs.forEach((thumb, i) => thumb.addEventListener("click", () => { index = i; showSlide(index); }));
+        
+        setInterval(() => { index++; showSlide(index); }, 3000); // Auto-slide every 3s
+    </script>
+</body>
+</html>
